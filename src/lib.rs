@@ -24,6 +24,11 @@ impl PyBasicCredential {
             wrapped: BasicCredential::new(identity),
         }
     }
+
+    #[getter]
+    fn identity(&self) -> PyResult<&[u8]> {
+        Ok(self.wrapped.identity())
+    }
 }
 
 /// Formats the sum of two numbers as string.
