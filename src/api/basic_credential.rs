@@ -1,3 +1,4 @@
+#[allow(unused_imports)]
 use pyo3::prelude::{*};
 use openmls::{prelude::{*,  tls_codec::*}};
 
