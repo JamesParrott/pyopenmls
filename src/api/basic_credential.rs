@@ -1,5 +1,5 @@
 use pyo3::prelude::{*};
-use openmls::{prelude::{*,  tls_codec::*}};
+use openmls::prelude::{*};
 
 /// Wrapper for OpenMLS BasicCredential
 #[pyclass(name = "BasicCredential")]
