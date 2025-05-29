@@ -14,3 +14,12 @@ pub enum PyCiphersuite {
     MLS_256_DHKEMP384_AES256GCM_SHA384_P384 = Ciphersuite::MLS_256_DHKEMP384_AES256GCM_SHA384_P384 as isize,
     MLS_256_XWING_CHACHA20POLY1305_SHA256_Ed25519 = Ciphersuite::MLS_256_XWING_CHACHA20POLY1305_SHA256_Ed25519 as isize,
 }
+
+// #[pymethods]
+// impl PyCiphersuite {
+//     #[new]
+//     fn new(value: i32) -> Self {
+//         Number(value)
+//     }
+//     pub const fn signature_algorithm(&self) -> PyResult
+// }
