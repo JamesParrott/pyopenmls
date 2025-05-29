@@ -1,3 +1,5 @@
+#![allow(unused)]
+#![allow(dead_code)]
 use pyo3::prelude::{*};
 use openmls::prelude::{*};
 use strum_macros::{Display, FromRepr};
