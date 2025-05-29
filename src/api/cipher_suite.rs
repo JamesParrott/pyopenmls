@@ -1,6 +1,6 @@
 use pyo3::prelude::{*};
 use openmls::{prelude::{*,  tls_codec::*}};
-use signature_scheme::PySignatureScheme
+use super::signature_scheme::PySignatureScheme;
 
 #[allow(non_camel_case_types)]
 #[pyclass(eq, eq_int, name="Ciphersuite")]
@@ -16,13 +16,13 @@ pub enum PyCiphersuite {
     MLS_256_XWING_CHACHA20POLY1305_SHA256_Ed25519 = Ciphersuite::MLS_256_XWING_CHACHA20POLY1305_SHA256_Ed25519 as isize,
 }
 
-#[pymethods]
-impl PyCiphersuite {
-    // #[new]
-    // fn new(value: i32) -> Self {
-    //     Number(value)
-    // }
-    pub const fn signature_algorithm(&self) -> PyResult<PySignatureScheme> {
+// #[pymethods]
+// impl PyCiphersuite {
+//     // #[new]
+//     // fn new(value: i32) -> Self {
+//     //     Number(value)
+//     // }
+//     pub const fn signature_algorithm(&self) -> PyResult<PySignatureScheme> {
 
-    }
-}
+//     }
+// }
