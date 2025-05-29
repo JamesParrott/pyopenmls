@@ -16,3 +16,6 @@ cipher_suite = pyopenmls.Ciphersuite.MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed2551
 print_deets_of_enum_member(cipher_suite)
 print(f'{cipher_suite is pyopenmls.Ciphersuite.MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519=}')
 print(f'{cipher_suite.signature_algorithm()=}')
+
+provider = pyopenmls.OpenMlsRustCrypto()
+print(f'{provider=}')
