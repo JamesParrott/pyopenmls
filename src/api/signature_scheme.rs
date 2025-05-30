@@ -20,11 +20,11 @@ pub enum PySignatureScheme {
 #[pymethods]
 impl PySignatureScheme {
 
-    pub fn name(&self) -> String {
-        self.to_string()
+    pub fn name(&self) -> PyResult<String> {
+        Ok(self.to_string())
     }
-    pub fn value(&self) -> u16 {
-        *self as u16
+    pub fn value(&self) -> PyResult<u16> {
+        Ok(*self as u16)
     }
 
 

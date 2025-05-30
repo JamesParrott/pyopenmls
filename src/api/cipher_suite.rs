@@ -23,15 +23,16 @@ pub enum PyCiphersuite {
 #[pymethods]
 impl PyCiphersuite {
 
-    pub fn name(&self) -> String {
-        self.to_string()
+    pub fn name(&self) -> PyResult<String> {
+        Ok(self.to_string())
     }
-    pub fn value(&self) -> u16 {
-        *self as u16
+    pub fn value(&self) -> PyResult<u16> {
+        Ok(*self as u16)
     }
 
     pub fn signature_algorithm(&self) -> Result<PySignatureScheme, PyErr> {
-        if let Ok(cipher_suite) = Ciphersuite::try_from(self.value()) {
+        let value = self.value()?;
+        if let Ok(cipher_suite) = Ciphersuite::try_from(value) {
             let signature_scheme = cipher_suite.signature_algorithm();
             Ok(PySignatureScheme::from_repr(signature_scheme as u16).unwrap())
         } else {

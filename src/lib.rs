@@ -10,5 +10,6 @@ fn pyopenmls(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<api::signature_scheme::PySignatureScheme>()?;
     m.add_class::<api::openmls_rust_crypto_provider::PyOpenMlsRustCrypto>()?;
     m.add_class::<api::signature_key_pair::PySignatureKeyPair>()?;
+    m.add_class::<api::storage_provider::PyStorageProvider>()?;
     Ok(())
 }
