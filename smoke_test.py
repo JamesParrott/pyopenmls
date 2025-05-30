@@ -55,14 +55,19 @@ def generate_credential_with_key(
     signature_key_pair = SignatureKeyPair(signature_algorithm)
 
     provider = provider or OpenMlsRustCrypto()
+
+    # This would need Python to borrow a ref 
+    # to provider's key_store, even within a wrapper
+    # which needs a little more care with PyO3.
     # key_store = provider.storage()
     # signature_key_pair.store(key_store)
 
-    print(f'{provider.storage_values=}')
+    # print(f'{provider.storage_values=}')
     signature_key_pair.store_in_provider(provider)
-    print(f'{provider.storage_values=}')
+    # print(f'{provider.storage_values=}')
 
-    # public_key = signature_key_pair.public_key()
+    public_key = signature_key_pair.public()
+    print(f'{public_key=}')
     # credential_with_key = CredentialWithKey(basic_credential, public_key)
 
     credential_with_key = None

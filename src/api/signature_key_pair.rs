@@ -39,5 +39,9 @@ impl PySignatureKeyPair {
         self.wrapped.store(provider.wrapped.storage()).expect("It must be possible to store keys.");
     }
 
+    pub fn public(&self) -> PyResult<&[u8]> {
+        Ok(self.wrapped.public())
+    }
+
 }
 
