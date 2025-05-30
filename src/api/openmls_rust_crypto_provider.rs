@@ -1,6 +1,7 @@
 use std::default::{Default};
-
+use std::collections::{HashMap};
 use pyo3::prelude::{*};
+use openmls::prelude::{OpenMlsProvider};
 use openmls_rust_crypto::{OpenMlsRustCrypto};
 
 #[allow(dead_code)]
@@ -30,4 +31,9 @@ impl PyOpenMlsRustCrypto {
     }
 
 
+    #[getter]
+    fn storage_values(&self) -> PyResult<HashMap<Vec<u8>, Vec<u8>>> {
+        let values = self.wrapped.storage().values.read().unwrap();
+        Ok(values.clone())
+    }
 }

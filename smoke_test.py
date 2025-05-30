@@ -58,7 +58,9 @@ def generate_credential_with_key(
     # key_store = provider.storage()
     # signature_key_pair.store(key_store)
 
+    print(f'{provider.storage_values=}')
     signature_key_pair.store_in_provider(provider)
+    print(f'{provider.storage_values=}')
 
     # public_key = signature_key_pair.public_key()
     # credential_with_key = CredentialWithKey(basic_credential, public_key)
