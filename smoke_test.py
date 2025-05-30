@@ -46,15 +46,21 @@ def generate_credential_with_key(
     cipher_suite: Ciphersuite | None = None,
 ) -> tuple[None, SignatureKeyPair]:
 # ) -> tuple[CredentialWithKey, SignatureKeyPair]:
-    cipher_suite = cipher_suite or Ciphersuite.MLS_256_XWING_CHACHA20POLY1305_SHA256_Ed25519
-    signature_algorithm = signature_algorithm or cipher_suite.signature_algorithm()
-    provider = provider or OpenMlsRustCrypto()
-
     basic_credential = BasicCredential(identity)
+
+    cipher_suite = cipher_suite or Ciphersuite.MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519
+    signature_algorithm = signature_algorithm or cipher_suite.signature_algorithm()
     signature_key_pair = SignatureKeyPair(signature_algorithm)
     
+    provider = provider or OpenMlsRustCrypto()
+    # key_store = provider.storage()
+    # signature_key_pair.store(key_store)
+    # public_key = signature_key_pair.public_key()
+    # credential_with_key = CredentialWithKey(basic_credential, public_key)
 
-    return (None, signature_key_pair)
+    credential_with_key = None
+
+    return (credential_with_key, signature_key_pair)
 
 
 cred_w_key, key_pair = generate_credential_with_key(b'Super_secret_ID')
