@@ -39,6 +39,8 @@ print('\n\n' 'Reproduce quickstart in Python')
 cipher_suite = Ciphersuite.MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519
 provider = OpenMlsRustCrypto()
 
+
+
 def generate_credential_with_key(
     identity: bytes,
     signature_algorithm: SignatureScheme | None = None,
@@ -51,10 +53,13 @@ def generate_credential_with_key(
     cipher_suite = cipher_suite or Ciphersuite.MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519
     signature_algorithm = signature_algorithm or cipher_suite.signature_algorithm()
     signature_key_pair = SignatureKeyPair(signature_algorithm)
-    
+
     provider = provider or OpenMlsRustCrypto()
     # key_store = provider.storage()
     # signature_key_pair.store(key_store)
+
+    signature_key_pair.store_in_provider(provider)
+
     # public_key = signature_key_pair.public_key()
     # credential_with_key = CredentialWithKey(basic_credential, public_key)
 
@@ -63,6 +68,10 @@ def generate_credential_with_key(
     return (credential_with_key, signature_key_pair)
 
 
-cred_w_key, key_pair = generate_credential_with_key(b'Super_secret_ID')
+cred_w_key, key_pair = generate_credential_with_key(
+    identity = b'Super_secret_ID',
+    provider = provider,
+    cipher_suite = cipher_suite,
+    )
 
 print(f'{key_pair=}')

@@ -2,12 +2,11 @@ use std::default::{Default};
 
 use pyo3::prelude::{*};
 use openmls_rust_crypto::{OpenMlsRustCrypto};
-// use super::openmls_rust_crypto_provider::PyStorageProvider;
 
 #[allow(dead_code)]
 #[pyclass(name="OpenMlsRustCrypto")]
 pub struct PyOpenMlsRustCrypto {
-    wrapped : OpenMlsRustCrypto,
+    pub wrapped : OpenMlsRustCrypto,
 
 }
 
@@ -26,12 +25,9 @@ impl PyOpenMlsRustCrypto {
     #[new]
     pub fn new() -> Self {
         Self {
-            wrapped: Default::default(),
+            wrapped: OpenMlsRustCrypto::default(),
         }
     }
 
-    // pub fn storage(&self) -> PyResult<PyStorageProvider> {
-        // OK(PyStorageProvider(self.wrapped))
-    // }
 
 }

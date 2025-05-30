@@ -6,7 +6,7 @@ use openmls_rust_crypto::MemoryStorage;
 #[allow(dead_code)]
 #[pyclass(name="StorageProvider")]
 pub struct PyStorageProvider {
-    wrapped : MemoryStorage,
+    pub wrapped : MemoryStorage,
 
 }
 

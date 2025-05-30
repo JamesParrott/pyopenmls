@@ -1,9 +1,9 @@
 use pyo3::prelude::{*};
 use pyo3::exceptions::PyValueError;
-use openmls::prelude::{SignatureScheme};
+use openmls::prelude::{SignatureScheme,OpenMlsProvider};
 use openmls_basic_credential::SignatureKeyPair;
 use super::signature_scheme::PySignatureScheme;
-// use super::openmls_rust_crypto_provider::PyStorageProvider;
+use super::openmls_rust_crypto_provider::PyOpenMlsRustCrypto;
 
 #[allow(dead_code)]
 #[pyclass(name="SignatureKeyPair")]
@@ -32,9 +32,12 @@ impl PySignatureKeyPair {
         }
     }
 
-    // pub fn store(&self, storage_provider: PyStorageProvider) {
+    // pub fn store(&self, storage_provider: &PyStorageProvider) {
     //     self.wrapped.store(storage_provider.wrapped);
     // }
+    pub fn store_in_provider(&self, provider: &PyOpenMlsRustCrypto) {
+        self.wrapped.store(provider.wrapped.storage()).expect("It must be possible to store keys.");
+    }
 
 }
 
