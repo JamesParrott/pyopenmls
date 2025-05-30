@@ -7,9 +7,9 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
-      - master
+    workflow_dispatch:
+    # branches:
+    #   - main
     tags:
       - '*'
   pull_request:
