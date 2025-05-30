@@ -72,6 +72,24 @@ def generate_credential_with_key(
 
     return (credential_with_key, signature_key_pair)
 
+def generate_key_package(
+    ciphersuite: Ciphersuite,
+    provider: OpenMlsRustCrypto,
+    signer: SignatureKeyPair,
+    credential_with_key: CredentialWithKey,
+) -> KeyPackageBundle {
+    """ A helper to create key package bundles. """
+
+    # Create the key package
+    KeyPackage.builder()
+        .build(
+            ciphersuite,
+            provider,
+            signer,
+            credential_with_key,
+        )
+        .unwrap()
+}
 
 cred_w_key, key_pair = generate_credential_with_key(
     identity = b'Super_secret_ID',
