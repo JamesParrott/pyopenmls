@@ -1,4 +1,3 @@
-use pyo3::exceptions::PyValueError;
 use pyo3::prelude::{*};
 use openmls::prelude::{*};
 use super::signature_scheme::PySignatureScheme;
@@ -20,23 +19,35 @@ pub enum PyCiphersuite {
     MLS_256_XWING_CHACHA20POLY1305_SHA256_Ed25519 = Ciphersuite::MLS_256_XWING_CHACHA20POLY1305_SHA256_Ed25519 as u16,
 }
 
+impl PyCiphersuite {
+    pub fn get_wrapped_equiv(&self) -> Ciphersuite {
+        let value = self.value();
+        let cipher_suite = Ciphersuite::try_from(value).expect("Only supported values are defined in this enum; old openmls version?");
+        cipher_suite
+    }
+}
+
 #[pymethods]
 impl PyCiphersuite {
 
-    pub fn name(&self) -> PyResult<String> {
-        Ok(self.to_string())
+    pub fn name(&self) -> String {
+        self.to_string()
     }
-    pub fn value(&self) -> PyResult<u16> {
-        Ok(*self as u16)
+    pub fn value(&self) -> u16 {
+        *self as u16
     }
 
+
     pub fn signature_algorithm(&self) -> Result<PySignatureScheme, PyErr> {
-        let value = self.value()?;
-        if let Ok(cipher_suite) = Ciphersuite::try_from(value) {
-            let signature_scheme = cipher_suite.signature_algorithm();
-            Ok(PySignatureScheme::from_repr(signature_scheme as u16).unwrap())
-        } else {
-            Err(PyValueError::new_err("Error retrieving SignatureScheme. "))
-        }
+        let cipher_suite: Ciphersuite = self.get_wrapped_equiv();
+        let signature_scheme: SignatureScheme = cipher_suite.signature_algorithm();
+        let signature_algorithm = PySignatureScheme::from_repr(signature_scheme as u16).expect("Sig scheme unsupported by this version of pyopenmls");
+        Ok(signature_algorithm)
+        // if let Ok(cipher_suite) = self.cipher_suite {
+        //     let signature_scheme = cipher_suite.signature_algorithm();
+        //     Ok(PySignatureScheme::from_repr(signature_scheme as u16).unwrap())
+        // } else {
+        //     Err(PyValueError::new_err("Error retrieving SignatureScheme. "))
+        // }
     }
 }

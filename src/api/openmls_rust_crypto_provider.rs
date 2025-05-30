@@ -5,6 +5,7 @@ use openmls::prelude::{OpenMlsProvider};
 use openmls_rust_crypto::{OpenMlsRustCrypto};
 
 #[allow(dead_code)]
+#[derive(Debug, Clone)]
 #[pyclass(name="OpenMlsRustCrypto")]
 pub struct PyOpenMlsRustCrypto {
     pub wrapped : OpenMlsRustCrypto,

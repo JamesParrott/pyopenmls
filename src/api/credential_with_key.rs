@@ -3,9 +3,10 @@ use openmls::prelude::{CredentialWithKey};
 use super::basic_credential::PyBasicCredential;
 
 /// Wrapper for OpenMLS CredentialWithKey
+#[derive(Debug,Clone)]
 #[pyclass(name = "CredentialWithKey")]
 pub struct PyCredentialWithKey {
-    wrapped: CredentialWithKey,
+    pub wrapped: CredentialWithKey,
 }
 
 #[pymethods]

@@ -7,9 +7,10 @@ use super::openmls_rust_crypto_provider::PyOpenMlsRustCrypto;
 
 #[allow(dead_code)]
 #[pyclass(name="SignatureKeyPair")]
+#[derive(Clone)]
 pub struct PySignatureKeyPair {
-    wrapped : SignatureKeyPair,
-    signature_scheme : SignatureScheme,
+    pub wrapped : SignatureKeyPair,
+    pub signature_scheme : SignatureScheme,
 
 }
 

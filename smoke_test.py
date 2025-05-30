@@ -4,6 +4,8 @@ from pyopenmls import (BasicCredential,
                        SignatureKeyPair,
                        SignatureScheme,
                        CredentialWithKey,
+                       KeyPackage,
+                       KeyPackageBundle,
                       )
 
 cred = BasicCredential(b'32rgrrhej68563ywe')
@@ -80,15 +82,18 @@ def generate_key_package(
 ) -> KeyPackageBundle {
     """ A helper to create key package bundles. """
 
+
+    # Create the key package builder
+    builder = KeyPackage.builder()
+    print(f'{builder=}')
+    
     # Create the key package
-    KeyPackage.builder()
-        .build(
-            ciphersuite,
-            provider,
-            signer,
-            credential_with_key,
-        )
-        .unwrap()
+        # .build(
+        #     ciphersuite,
+        #     provider,
+        #     signer,
+        #     credential_with_key,
+        # )
 }
 
 cred_w_key, key_pair = generate_credential_with_key(
@@ -99,3 +104,5 @@ cred_w_key, key_pair = generate_credential_with_key(
 
 print(f'{cred_w_key=}')
 print(f'{key_pair=}')
+
+generate_key_package(cipher_suite, provider, key_pair, cred_w_key)
