@@ -1,10 +1,11 @@
 use pyo3::prelude::{*};
-use openmls::prelude::{*};
+use openmls::prelude::{BasicCredential};
 
 /// Wrapper for OpenMLS BasicCredential
+#[derive(Debug, PartialEq, Clone)]
 #[pyclass(name = "BasicCredential")]
 pub struct PyBasicCredential {
-    wrapped: BasicCredential,
+    pub wrapped: BasicCredential,
 }
 
 #[pymethods]

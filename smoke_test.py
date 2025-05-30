@@ -3,6 +3,7 @@ from pyopenmls import (BasicCredential,
                        OpenMlsRustCrypto,
                        SignatureKeyPair,
                        SignatureScheme,
+                       CredentialWithKey,
                       )
 
 cred = BasicCredential(b'32rgrrhej68563ywe')
@@ -46,8 +47,7 @@ def generate_credential_with_key(
     signature_algorithm: SignatureScheme | None = None,
     provider: OpenMlsRustCrypto = None,
     cipher_suite: Ciphersuite | None = None,
-) -> tuple[None, SignatureKeyPair]:
-# ) -> tuple[CredentialWithKey, SignatureKeyPair]:
+) -> tuple[CredentialWithKey, SignatureKeyPair]:
     basic_credential = BasicCredential(identity)
 
     cipher_suite = cipher_suite or Ciphersuite.MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519
@@ -67,10 +67,8 @@ def generate_credential_with_key(
     # print(f'{provider.storage_values=}')
 
     public_key = signature_key_pair.public()
-    print(f'{public_key=}')
-    # credential_with_key = CredentialWithKey(basic_credential, public_key)
-
-    credential_with_key = None
+    # print(f'{public_key=}')
+    credential_with_key = CredentialWithKey(basic_credential, public_key)
 
     return (credential_with_key, signature_key_pair)
 
@@ -81,4 +79,5 @@ cred_w_key, key_pair = generate_credential_with_key(
     cipher_suite = cipher_suite,
     )
 
+print(f'{cred_w_key=}')
 print(f'{key_pair=}')
