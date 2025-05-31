@@ -64,7 +64,7 @@ def generate_key_package(
 
     # Create the key package builder
     builder = KeyPackage.builder()
-    print(f'{builder=}')
+    # print(f'{builder=}')
     
     # Create the key package bundle
     bundle = builder.build(
@@ -82,11 +82,11 @@ cred_w_key, key_pair = generate_credential_with_key(
     ciphersuite = ciphersuite,
     )
 
-print(f'{cred_w_key=}')
-print(f'{key_pair=}')
+# print(f'{cred_w_key=}')
+# print(f'{key_pair=}')
 
 key_package_bundle = generate_key_package(ciphersuite, provider, key_pair, cred_w_key)
-print(f'{key_package_bundle=}')
+# print(f'{key_package_bundle=}')
 
 
 #First they need credentials to identify them
@@ -151,7 +151,7 @@ mls_message_in = MlsMessageIn.tls_deserialize(serialized_welcome)
 
 # ... and inspect the message.
 welcome = mls_message_in.extract_welcome()
-print(f'{welcome=}')
+# print(f'{welcome=}')
 # welcome = match mls_message_in.extract() {
 #    MlsMessageBodyIn::Welcome(welcome) => welcome,
 #    # We know it's a welcome message, so we ignore all other cases.
@@ -173,4 +173,4 @@ maxim_staged_join = StagedWelcome.new_from_welcome(
 maxim_group = maxim_staged_join.into_group(provider)
 
 
-print(f'{maxim_group=}')
+# print(f'{maxim_group=}')
