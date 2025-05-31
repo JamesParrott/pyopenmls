@@ -19,9 +19,6 @@ impl PyKeyPackage {
         Ok(PyKeyPackageBuilder::new())
     }
 
-    // pub fn key_package() {
-
-    // }
 }
 
 
@@ -71,4 +68,9 @@ pub struct PyKeyPackageBundle {
 #[pymethods]
 impl PyKeyPackageBundle {
 
+    pub fn key_package(&self) -> PyKeyPackage{
+        PyKeyPackage{
+            wrapped: self.wrapped.key_package().clone()
+        }
+    }
 }

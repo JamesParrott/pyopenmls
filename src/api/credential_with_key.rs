@@ -22,3 +22,7 @@ impl PyCredentialWithKey {
     }
 
 }
+
+// impl Copy for CredentialWithKey {
+
+// }

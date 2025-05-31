@@ -4,6 +4,7 @@ use openmls::prelude::{*};
 use super::openmls_rust_crypto_provider::PyOpenMlsRustCrypto;
 use super::signature_key_pair::PySignatureKeyPair;
 use super::credential_with_key::PyCredentialWithKey;
+use super::key_packages::PyKeyPackageBundle;
 
 
 #[derive(Debug, Default)]
@@ -51,8 +52,11 @@ impl PyMlsGroup {
     }
 
     // pub fn add_members(
-
-    // ) -> {
+    //     &mut self,
+    //     provider: &PyOpenMlsRustCrypto,
+    //     signer: &PySignatureKeyPair,
+    //     key_packages: &[PyKeyPackageBundle],
+    // ) -> (MlsMessageOut, MlsMessageOut, Option<GroupInfo>) {
 
     // }
 }
