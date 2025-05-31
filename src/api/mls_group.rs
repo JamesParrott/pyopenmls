@@ -1,13 +1,12 @@
-use std::default::{Default};
 use pyo3::prelude::{*};
-use openmls::prelude::{*};
+use openmls::prelude::{*,group_info::{GroupInfo}};
 use super::openmls_rust_crypto_provider::PyOpenMlsRustCrypto;
 use super::signature_key_pair::PySignatureKeyPair;
 use super::credential_with_key::PyCredentialWithKey;
-use super::key_packages::PyKeyPackageBundle;
+use super::key_packages::PyKeyPackage;
 
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 #[pyclass(name="MlsGroupCreateConfig")]
 pub struct PyMlsGroupCreateConfig {
     pub wrapped : MlsGroupCreateConfig,
@@ -18,7 +17,7 @@ impl PyMlsGroupCreateConfig {
     #[new]
     pub fn new() -> Self {
         Self {
-            wrapped: Default::default(),
+            wrapped: MlsGroupCreateConfig::default(),
         }
     }
 }
@@ -51,12 +50,34 @@ impl PyMlsGroup {
         }
     }
 
-    // pub fn add_members(
-    //     &mut self,
-    //     provider: &PyOpenMlsRustCrypto,
-    //     signer: &PySignatureKeyPair,
-    //     key_packages: &[PyKeyPackageBundle],
-    // ) -> (MlsMessageOut, MlsMessageOut, Option<GroupInfo>) {
-
-    // }
+    pub fn add_member(
+        &mut self,
+        provider: &PyOpenMlsRustCrypto,
+        signer: &PySignatureKeyPair,
+        key_package: &PyKeyPackage,
+    ) -> (PyMlsMessageOut, PyMlsMessageOut, PyOptionalGroupInfo) {
+        
+        let (mls_message_out, welcome_out, optional_group_info) = self.wrapped
+            .add_members(&provider.wrapped, &signer.wrapped, &[key_package.wrapped.clone()])
+            .expect("Could not add members.");
+        
+        (PyMlsMessageOut{wrapped:mls_message_out},
+         PyMlsMessageOut{wrapped:welcome_out},
+         PyOptionalGroupInfo{wrapped:optional_group_info},
+        )
+        }
 }
+
+
+#[derive(Debug)]
+#[pyclass(name="MlsMessageOut")]
+pub struct PyMlsMessageOut {
+    pub wrapped : MlsMessageOut,
+}
+
+#[derive(Debug)]
+#[pyclass(name="OptionalGroupInfo")]
+pub struct PyOptionalGroupInfo {
+    pub wrapped : Option<GroupInfo>,
+}
+

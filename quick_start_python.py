@@ -115,6 +115,9 @@ maxim_key_package = generate_key_package(ciphersuite, provider, maxim_signer, ma
 
 # print(f'{maxim_key_package=}')
 
+# maxim_k_p_only = maxim_key_package.key_package()
+# print(f'{maxim_k_p_only=}')
+
 # Now Sasha starts a new group ...
 sasha_group = MlsGroup(
     provider,
@@ -124,12 +127,10 @@ sasha_group = MlsGroup(
 )
 # print(f'{sasha_group=}')
 
-maxim_k_p_only = maxim_key_package.key_package()
-print(f'{maxim_k_p_only=}')
-
 # ... and invites Maxim.
 # The key package has to be retrieved from Maxim in some way. Most likely
 # via a server storing key packages for users.
-# mls_message_out, welcome_out, group_info = (sasha_group
-#     .add_members(provider, sasha_signer, [maxim_key_package.key_package()])
-# )
+mls_message_out, welcome_out, group_info = (sasha_group
+    .add_member(provider, sasha_signer, maxim_key_package.key_package())
+)
+
