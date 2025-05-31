@@ -136,3 +136,34 @@ mls_message_out, welcome_out, group_info = (sasha_group
 
 # Sasha merges the pending commit that adds Maxim.
 sasha_group.merge_pending_commit(provider)
+
+
+# Sascha serializes the [`MlsMessageOut`] containing the [`Welcome`].
+serialized_welcome: bytes = welcome_out.tls_serialize_detached()
+# print(f'{serialized_welcome=}')
+
+# Maxim can now de-serialize the message as an [`MlsMessageIn`] ...
+# mls_message_in = MlsMessageIn::tls_deserialize(&mut serialized_welcome.as_slice())
+#    .expect("An unexpected error occurred.");
+
+# ... and inspect the message.
+# welcome = match mls_message_in.extract() {
+#    MlsMessageBodyIn::Welcome(welcome) => welcome,
+#    # We know it's a welcome message, so we ignore all other cases.
+#    _ => unreachable!("Unexpected message type."),
+# };
+
+# Now Maxim can build a staged join for the group in order to inspect the welcome
+# maxim_staged_join = StagedWelcome::new_from_welcome(
+#     provider,
+#     &MlsGroupJoinConfig::default(),
+#     welcome,
+#     # The public tree is need and transferred out of band.
+#     # It is also possible to use the [`RatchetTreeExtension`]
+#     Some(sasha_group.export_ratchet_tree().into()),
+# )
+# .expect("Error creating a staged join from Welcome");
+
+# Finally, Maxim can create the group
+# maxim_group = maxim_staged_join.into_group(provider)
+    # .expect("Error creating the group from the staged join");

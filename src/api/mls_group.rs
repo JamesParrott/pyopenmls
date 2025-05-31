@@ -1,4 +1,5 @@
 use pyo3::prelude::{*};
+use openmls::prelude::tls_codec::Serialize;
 use openmls::prelude::{*,group_info::{GroupInfo}};
 use super::openmls_rust_crypto_provider::PyOpenMlsRustCrypto;
 use super::signature_key_pair::PySignatureKeyPair;
@@ -82,6 +83,12 @@ pub struct PyMlsMessageOut {
     pub wrapped : MlsMessageOut,
 }
 
+#[pymethods]
+impl PyMlsMessageOut {
+    pub fn tls_serialize_detached(&self) -> Vec<u8> {
+        self.wrapped.tls_serialize_detached().expect("MlsMessageout should be serializable")
+    }
+}
 #[derive(Debug)]
 #[pyclass(name="OptionalGroupInfo")]
 pub struct PyOptionalGroupInfo {
