@@ -1,4 +1,5 @@
 from pyopenmls import (BasicCredential,
+                       CredentialType,
                        Ciphersuite,
                        OpenMlsRustCrypto,
                        SignatureKeyPair,
@@ -38,72 +39,4 @@ signature_key_pair_ciphersuite = SignatureKeyPair(cipher_suite.signature_algorit
 print(f'{signature_key_pair_ciphersuite=}')
 
 
-print('\n\n' 'Reproduce quickstart in Python')
-cipher_suite = Ciphersuite.MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519
-provider = OpenMlsRustCrypto()
-
-
-
-def generate_credential_with_key(
-    identity: bytes,
-    signature_algorithm: SignatureScheme | None = None,
-    provider: OpenMlsRustCrypto = None,
-    cipher_suite: Ciphersuite | None = None,
-) -> tuple[CredentialWithKey, SignatureKeyPair]:
-    basic_credential = BasicCredential(identity)
-
-    cipher_suite = cipher_suite or Ciphersuite.MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519
-    signature_algorithm = signature_algorithm or cipher_suite.signature_algorithm()
-    signature_key_pair = SignatureKeyPair(signature_algorithm)
-
-    provider = provider or OpenMlsRustCrypto()
-
-    # This would need Python to borrow a ref 
-    # to provider's key_store, even within a wrapper
-    # which needs a little more care with PyO3.
-    # key_store = provider.storage()
-    # signature_key_pair.store(key_store)
-
-    # print(f'{provider.storage_values=}')
-    signature_key_pair.store_in_provider(provider)
-    # print(f'{provider.storage_values=}')
-
-    public_key = signature_key_pair.public()
-    # print(f'{public_key=}')
-    credential_with_key = CredentialWithKey(basic_credential, public_key)
-
-    return (credential_with_key, signature_key_pair)
-
-def generate_key_package(
-    ciphersuite: Ciphersuite,
-    provider: OpenMlsRustCrypto,
-    signer: SignatureKeyPair,
-    credential_with_key: CredentialWithKey,
-) -> KeyPackageBundle:
-    """ A helper to create key package bundles. """
-
-
-    # Create the key package builder
-    builder = KeyPackage.builder()
-    print(f'{builder=}')
-    
-    # Create the key package bundle
-    bundle = builder.build(
-                ciphersuite,
-                provider,
-                signer,
-                credential_with_key,
-                )
-    return bundle
-
-cred_w_key, key_pair = generate_credential_with_key(
-    identity = b'Super_secret_ID',
-    provider = provider,
-    cipher_suite = cipher_suite,
-    )
-
-print(f'{cred_w_key=}')
-print(f'{key_pair=}')
-
-key_package_bundle = generate_key_package(cipher_suite, provider, key_pair, cred_w_key)
-print(f'{key_package_bundle=}')
+print('\n\n')

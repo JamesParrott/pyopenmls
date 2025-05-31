@@ -1,4 +1,5 @@
 pub mod basic_credential;
+pub mod credential_type;
 pub mod credential_with_key;
 pub mod cipher_suite;
 pub mod key_packages;
