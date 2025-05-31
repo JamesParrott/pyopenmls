@@ -79,7 +79,7 @@ def generate_key_package(
     provider: OpenMlsRustCrypto,
     signer: SignatureKeyPair,
     credential_with_key: CredentialWithKey,
-) -> KeyPackageBundle {
+) -> KeyPackageBundle:
     """ A helper to create key package bundles. """
 
 
@@ -87,14 +87,14 @@ def generate_key_package(
     builder = KeyPackage.builder()
     print(f'{builder=}')
     
-    # Create the key package
-        # .build(
-        #     ciphersuite,
-        #     provider,
-        #     signer,
-        #     credential_with_key,
-        # )
-}
+    # Create the key package bundle
+    # bundle = builder.build(
+    #             ciphersuite,
+    #             provider,
+    #             signer,
+    #             credential_with_key,
+    #             )
+
 
 cred_w_key, key_pair = generate_credential_with_key(
     identity = b'Super_secret_ID',
