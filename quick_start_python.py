@@ -1,3 +1,5 @@
+import copy
+
 from pyopenmls import (BasicCredential,
                        CredentialType,
                        Ciphersuite,
@@ -7,6 +9,8 @@ from pyopenmls import (BasicCredential,
                        CredentialWithKey,
                        KeyPackage,
                        KeyPackageBundle,
+                       MlsGroup,
+                       MlsGroupCreateConfig,
                       )
                       
 print('Reproduce quickstart in Python')
@@ -92,7 +96,7 @@ sasha_credential_with_key, sasha_signer = generate_credential_with_key(
 
 # Don't do this in real code.  See:
 # print(f'{provider.storage_values=}')
-# Maxim now has access to Sasha's private key (even more easily than he already did,
+# Maxim now has access to Sasha's private key (even more easily than they already did,
 # as they're both storing creds in the same Python process anyway). 
 maxim_credential_with_key, maxim_signer = generate_credential_with_key(
     b"Maxim",
@@ -101,8 +105,28 @@ maxim_credential_with_key, maxim_signer = generate_credential_with_key(
     provider,
 )
 
+# print(f'{sasha_credential_with_key=}, {sasha_signer=}')
+# print(f'{maxim_credential_with_key=}, {maxim_signer=}')
 # Then they generate key packages to facilitate the asynchronous handshakes
 # in MLS
 
 # Generate KeyPackages
 maxim_key_package = generate_key_package(ciphersuite, provider, maxim_signer, maxim_credential_with_key)
+
+# print(f'{maxim_key_package=}')
+
+# Now Sasha starts a new group ...
+sasha_group = MlsGroup(
+    provider,
+    sasha_signer,
+    MlsGroupCreateConfig(),
+    sasha_credential_with_key,
+)
+# print(f'{sasha_group=}')
+
+# ... and invites Maxim.
+# The key package has to be retrieved from Maxim in some way. Most likely
+# via a server storing key packages for users.
+# mls_message_out, welcome_out, group_info = (sasha_group
+#     .add_members(provider, sasha_signer, maxim_key_package.key_package())
+# )

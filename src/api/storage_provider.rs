@@ -3,7 +3,7 @@ use std::default::{Default};
 use pyo3::prelude::{*};
 use openmls_rust_crypto::MemoryStorage;
 
-#[allow(dead_code)]
+#[derive(Default)]
 #[pyclass(name="StorageProvider")]
 pub struct PyStorageProvider {
     pub wrapped : MemoryStorage,

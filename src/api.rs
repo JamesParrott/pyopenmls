@@ -3,6 +3,7 @@ pub mod credential_type;
 pub mod credential_with_key;
 pub mod cipher_suite;
 pub mod key_packages;
+pub mod mls_group;
 pub mod openmls_rust_crypto_provider;
 pub mod signature_key_pair;
 pub mod signature_scheme;

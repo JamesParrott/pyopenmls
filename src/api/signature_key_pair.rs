@@ -5,7 +5,6 @@ use openmls_basic_credential::SignatureKeyPair;
 use super::signature_scheme::PySignatureScheme;
 use super::openmls_rust_crypto_provider::PyOpenMlsRustCrypto;
 
-#[allow(dead_code)]
 #[pyclass(name="SignatureKeyPair")]
 pub struct PySignatureKeyPair {
     pub wrapped : SignatureKeyPair,

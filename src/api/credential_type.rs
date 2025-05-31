@@ -11,7 +11,8 @@ use strum_macros::{Display, FromRepr};
 pub enum PyCredentialType {
 
 
-    // TODO:  Work out how to avoid duplicating the implementation in openmls
+    // TODO:  Work out how to avoid duplicating openmls's implementation
+    // (the "1" and "2")
     // - can't use u16::from in a const
     // - can't use as u16 becuase this is a non-unit enum
     /// A [`BasicCredential`]
