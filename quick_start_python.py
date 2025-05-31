@@ -143,7 +143,7 @@ serialized_welcome: bytes = welcome_out.tls_serialize_detached()
 # print(f'{serialized_welcome=}')
 
 # Maxim can now de-serialize the message as an [`MlsMessageIn`] ...
-# mls_message_in = MlsMessageIn::tls_deserialize(&mut serialized_welcome.as_slice())
+# mls_message_in = MlsMessageIn.tls_deserialize(serialized_welcome)
 #    .expect("An unexpected error occurred.");
 
 # ... and inspect the message.

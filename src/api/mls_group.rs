@@ -1,5 +1,6 @@
 use pyo3::prelude::{*};
-use openmls::prelude::tls_codec::Serialize;
+use pyo3::exceptions::PyValueError;
+use openmls::prelude::tls_codec::{Serialize,Deserialize};
 use openmls::prelude::{*,group_info::{GroupInfo}};
 use super::openmls_rust_crypto_provider::PyOpenMlsRustCrypto;
 use super::signature_key_pair::PySignatureKeyPair;
@@ -89,6 +90,26 @@ impl PyMlsMessageOut {
         self.wrapped.tls_serialize_detached().expect("MlsMessageout should be serializable")
     }
 }
+
+#[derive(Debug)]
+#[pyclass(name="MlsMessageIn")]
+pub struct PyMlsMessageIn {
+    pub wrapped : MlsMessageIn,
+}
+
+#[pymethods]
+impl PyMlsMessageIn {
+    #[staticmethod]
+    pub fn tls_deserialize(serialized_bytes: Vec<u8>) -> PyResult<PyMlsMessageIn> {
+        let result = MlsMessageIn::tls_deserialize(& mut serialized_bytes.as_slice());
+        if let Ok(mls_message_in) = result {
+            Ok(PyMlsMessageIn{wrapped: mls_message_in})
+        } else {
+            Err(PyValueError::new_err("Could not deserialize data to MLsMessageIn. "))
+        }
+    }
+}
+
 #[derive(Debug)]
 #[pyclass(name="OptionalGroupInfo")]
 pub struct PyOptionalGroupInfo {
