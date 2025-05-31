@@ -6,6 +6,7 @@ use super::openmls_rust_crypto_provider::PyOpenMlsRustCrypto;
 use super::signature_key_pair::PySignatureKeyPair;
 use super::credential_with_key::PyCredentialWithKey;
 use super::key_packages::PyKeyPackage;
+use super::ratchet_tree_in::PyRatchetTreeIn;
 use super::welcome::PyWelcome;
 
 
@@ -92,7 +93,13 @@ impl PyMlsGroup {
     ) {
         self.wrapped.merge_pending_commit(&provider.wrapped).expect("error merging pending commit");
     }
+
+    pub fn export_ratchet_tree(&self) -> PyRatchetTreeIn{
+        PyRatchetTreeIn{wrapped:self.wrapped.export_ratchet_tree().into()}
+    }
 }
+
+
 
 
 #[derive(Debug)]

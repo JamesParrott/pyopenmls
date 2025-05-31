@@ -11,6 +11,7 @@ fn pyopenmls(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<api::cipher_suite::PyCiphersuite>()?;
     m.add_class::<api::signature_scheme::PySignatureScheme>()?;
     m.add_class::<api::openmls_rust_crypto_provider::PyOpenMlsRustCrypto>()?;
+    m.add_class::<api::ratchet_tree_in::PyRatchetTreeIn>()?;
     m.add_class::<api::signature_key_pair::PySignatureKeyPair>()?;
     m.add_class::<api::storage_provider::PyStorageProvider>()?;
     m.add_class::<api::key_packages::PyKeyPackage>()?;
@@ -20,6 +21,7 @@ fn pyopenmls(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<api::mls_group::PyMlsGroupCreateConfig>()?;
     m.add_class::<api::mls_group::PyMlsGroupJoinConfig>()?;
     m.add_class::<api::mls_group::PyMlsMessageIn>()?;
+    m.add_class::<api::staged_welcome::PyStagedWelcome>()?;
     m.add_class::<api::welcome::PyWelcome>()?;
     Ok(())
 }
