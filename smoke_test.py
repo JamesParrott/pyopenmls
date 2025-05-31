@@ -88,13 +88,13 @@ def generate_key_package(
     print(f'{builder=}')
     
     # Create the key package bundle
-    # bundle = builder.build(
-    #             ciphersuite,
-    #             provider,
-    #             signer,
-    #             credential_with_key,
-    #             )
-
+    bundle = builder.build(
+                ciphersuite,
+                provider,
+                signer,
+                credential_with_key,
+                )
+    return bundle
 
 cred_w_key, key_pair = generate_credential_with_key(
     identity = b'Super_secret_ID',
@@ -105,4 +105,5 @@ cred_w_key, key_pair = generate_credential_with_key(
 print(f'{cred_w_key=}')
 print(f'{key_pair=}')
 
-generate_key_package(cipher_suite, provider, key_pair, cred_w_key)
+key_package_bundle = generate_key_package(cipher_suite, provider, key_pair, cred_w_key)
+print(f'{key_package_bundle=}')
