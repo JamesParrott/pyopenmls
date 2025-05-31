@@ -134,3 +134,5 @@ mls_message_out, welcome_out, group_info = (sasha_group
     .add_member(provider, sasha_signer, maxim_key_package.key_package())
 )
 
+# Sasha merges the pending commit that adds Maxim.
+sasha_group.merge_pending_commit(provider)

@@ -66,6 +66,13 @@ impl PyMlsGroup {
          PyOptionalGroupInfo{wrapped:optional_group_info},
         )
         }
+
+    pub fn merge_pending_commit(
+        &mut self,
+        provider: &PyOpenMlsRustCrypto,
+    ) {
+        self.wrapped.merge_pending_commit(&provider.wrapped).expect("error merging pending commit");
+    }
 }
 
 
