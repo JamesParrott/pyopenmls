@@ -18,5 +18,7 @@ fn pyopenmls(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<api::key_packages::PyKeyPackageBundle>()?;
     m.add_class::<api::mls_group::PyMlsGroup>()?;
     m.add_class::<api::mls_group::PyMlsGroupCreateConfig>()?;
+    m.add_class::<api::mls_group::PyMlsMessageIn>()?;
+    m.add_class::<api::welcome::PyWelcome>()?;
     Ok(())
 }

@@ -1,11 +1,12 @@
 use pyo3::prelude::{*};
 use pyo3::exceptions::PyValueError;
 use openmls::prelude::tls_codec::{Serialize,Deserialize};
-use openmls::prelude::{*,group_info::{GroupInfo}};
+use openmls::prelude::{*,group_info::{GroupInfo},};
 use super::openmls_rust_crypto_provider::PyOpenMlsRustCrypto;
 use super::signature_key_pair::PySignatureKeyPair;
 use super::credential_with_key::PyCredentialWithKey;
 use super::key_packages::PyKeyPackage;
+use super::welcome::PyWelcome;
 
 
 #[derive(Debug)]
@@ -87,7 +88,7 @@ pub struct PyMlsMessageOut {
 #[pymethods]
 impl PyMlsMessageOut {
     pub fn tls_serialize_detached(&self) -> Vec<u8> {
-        self.wrapped.tls_serialize_detached().expect("MlsMessageout should be serializable")
+        self.wrapped.tls_serialize_detached().expect("MlsMessageOut should be serializable")
     }
 }
 
@@ -100,7 +101,7 @@ pub struct PyMlsMessageIn {
 #[pymethods]
 impl PyMlsMessageIn {
     #[staticmethod]
-    pub fn tls_deserialize(serialized_bytes: Vec<u8>) -> PyResult<PyMlsMessageIn> {
+    pub fn tls_deserialize(serialized_bytes: Vec<u8>) -> PyResult<PyMlsMessageIn> {   
         let result = MlsMessageIn::tls_deserialize(& mut serialized_bytes.as_slice());
         if let Ok(mls_message_in) = result {
             Ok(PyMlsMessageIn{wrapped: mls_message_in})
@@ -108,6 +109,25 @@ impl PyMlsMessageIn {
             Err(PyValueError::new_err("Could not deserialize data to MLsMessageIn. "))
         }
     }
+
+    pub fn extract_welcome(&self) -> PyResult<PyWelcome>{
+        match self.wrapped.clone().extract() {
+            MlsMessageBodyIn::Welcome(welcome) => Ok(PyWelcome{wrapped:welcome}),
+            _ => Err(PyValueError::new_err("MlsMessageIn did not match a welcome message.")),
+        }
+    }
+}
+
+
+#[derive(Debug)]
+#[pyclass(name="MlsMessageBodyIn")]
+pub struct PyMlsMessageBodyIn {
+    pub wrapped : MlsMessageBodyIn,
+}
+
+#[pymethods]
+impl PyMlsMessageBodyIn {
+
 }
 
 #[derive(Debug)]

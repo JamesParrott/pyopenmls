@@ -11,6 +11,7 @@ from pyopenmls import (BasicCredential,
                        KeyPackageBundle,
                        MlsGroup,
                        MlsGroupCreateConfig,
+                       MlsMessageIn,
                       )
                       
 print('Reproduce quickstart in Python')
@@ -143,10 +144,12 @@ serialized_welcome: bytes = welcome_out.tls_serialize_detached()
 # print(f'{serialized_welcome=}')
 
 # Maxim can now de-serialize the message as an [`MlsMessageIn`] ...
-# mls_message_in = MlsMessageIn.tls_deserialize(serialized_welcome)
-#    .expect("An unexpected error occurred.");
+mls_message_in = MlsMessageIn.tls_deserialize(serialized_welcome)
+# print(f'{mls_message_in=}')
 
 # ... and inspect the message.
+welcome = mls_message_in.extract_welcome()
+print(f'{welcome=}')
 # welcome = match mls_message_in.extract() {
 #    MlsMessageBodyIn::Welcome(welcome) => welcome,
 #    # We know it's a welcome message, so we ignore all other cases.

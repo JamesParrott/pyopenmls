@@ -17,7 +17,7 @@ impl PySignatureKeyPair {
 
     #[new]
     pub fn new(py_signature_scheme: PySignatureScheme) -> PyResult<Self> {
-        let sig_scheme_code = py_signature_scheme.value()?;
+        let sig_scheme_code = py_signature_scheme.value();
         if let Ok(signature_scheme) = SignatureScheme::try_from(sig_scheme_code) {
             Ok(Self {
                     // Currently only supports ECDSA_SECP256R1_SHA256 and ED25519
@@ -27,7 +27,6 @@ impl PySignatureKeyPair {
         } else {        
             let error_msg = format!("Could not generate signature scheme for code: {:?}",sig_scheme_code);
             Err(PyValueError::new_err(error_msg))
-
         }
     }
 
