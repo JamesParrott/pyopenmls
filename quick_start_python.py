@@ -171,4 +171,6 @@ maxim_staged_join = StagedWelcome.new_from_welcome(
 
 # Finally, Maxim can create the group
 maxim_group = maxim_staged_join.into_group(provider)
-    # .expect("Error creating the group from the staged join");
+
+
+print(f'{maxim_group=}')
