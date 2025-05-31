@@ -25,6 +25,22 @@ impl PyMlsGroupCreateConfig {
     }
 }
 
+#[derive(Debug)]
+#[pyclass(name="MlsGroupJoinConfig")]
+pub struct PyMlsGroupJoinConfig {
+    pub wrapped : MlsGroupJoinConfig,
+}
+
+#[pymethods]
+impl PyMlsGroupJoinConfig {
+    #[new]
+    pub fn new() -> Self {
+        Self {
+            wrapped: MlsGroupJoinConfig::default(),
+        }
+    }
+}
+
 
 #[derive(Debug)]
 #[pyclass(name="MlsGroup")]
@@ -106,7 +122,7 @@ impl PyMlsMessageIn {
         if let Ok(mls_message_in) = result {
             Ok(PyMlsMessageIn{wrapped: mls_message_in})
         } else {
-            Err(PyValueError::new_err("Could not deserialize data to MLsMessageIn. "))
+            Err(PyValueError::new_err("Could not deserialize data to MlsMessageIn. "))
         }
     }
 
@@ -125,14 +141,11 @@ pub struct PyMlsMessageBodyIn {
     pub wrapped : MlsMessageBodyIn,
 }
 
-#[pymethods]
-impl PyMlsMessageBodyIn {
-
-}
 
 #[derive(Debug)]
 #[pyclass(name="OptionalGroupInfo")]
 pub struct PyOptionalGroupInfo {
     pub wrapped : Option<GroupInfo>,
 }
+
 

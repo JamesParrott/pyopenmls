@@ -11,6 +11,7 @@ from pyopenmls import (BasicCredential,
                        KeyPackageBundle,
                        MlsGroup,
                        MlsGroupCreateConfig,
+                       MlsGroupJoinConfig,
                        MlsMessageIn,
                       )
                       
@@ -155,7 +156,7 @@ print(f'{welcome=}')
 #    # We know it's a welcome message, so we ignore all other cases.
 #    _ => unreachable!("Unexpected message type."),
 # };
-
+MlsGroupJoinConfig()
 # Now Maxim can build a staged join for the group in order to inspect the welcome
 # maxim_staged_join = StagedWelcome::new_from_welcome(
 #     provider,
