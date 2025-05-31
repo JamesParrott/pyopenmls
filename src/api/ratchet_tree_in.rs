@@ -3,6 +3,7 @@ use openmls::prelude::{*};
 
 
 /// Wrapper for OpenMLS RatchetTreeIn
+#[derive(Clone)]
 #[pyclass(name = "RatchetTreeIn")]
 pub struct PyRatchetTreeIn {
     pub wrapped: RatchetTreeIn,

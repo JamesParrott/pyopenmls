@@ -13,7 +13,7 @@ from pyopenmls import (BasicCredential,
                        MlsGroupCreateConfig,
                        MlsGroupJoinConfig,
                        MlsMessageIn,
-                       StagedWelcome
+                       StagedWelcome,
                       )
                       
 print('Reproduce quickstart in Python')
@@ -159,16 +159,16 @@ print(f'{welcome=}')
 # };
 MlsGroupJoinConfig()
 # Now Maxim can build a staged join for the group in order to inspect the welcome
-# maxim_staged_join = StagedWelcome.new_from_welcome(
-#     provider,
-#     MlsGroupJoinConfig(),
-#     welcome,
-#     # The public tree is need and transferred out of band.
-#     # It is also possible to use the [`RatchetTreeExtension`]
-#     sasha_group.export_ratchet_tree(),
-# )
+maxim_staged_join = StagedWelcome.new_from_welcome(
+    provider,
+    MlsGroupJoinConfig(),
+    welcome,
+    # The public tree is need and transferred out of band.
+    # It is also possible to use the [`RatchetTreeExtension`]
+    sasha_group.export_ratchet_tree(),
+)
 # .expect("Error creating a staged join from Welcome");
 
 # Finally, Maxim can create the group
-# maxim_group = maxim_staged_join.into_group(provider)
+maxim_group = maxim_staged_join.into_group(provider)
     # .expect("Error creating the group from the staged join");

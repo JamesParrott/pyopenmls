@@ -4,6 +4,7 @@ use openmls::prelude::{*};
 
 
 /// Wrapper for OpenMLS Welcome
+#[derive(Clone)]
 #[pyclass(name = "Welcome")]
 pub struct PyWelcome {
     pub wrapped: Welcome,
