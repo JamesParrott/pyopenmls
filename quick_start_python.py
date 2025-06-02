@@ -11,6 +11,7 @@ from pyopenmls import (BasicCredential,
                        MlsGroupCreateConfig,
                        MlsGroupJoinConfig,
                        MlsMessageIn,
+                       MlsMessageBodyIn,
                        StagedWelcome,
                       )
                       
@@ -71,6 +72,14 @@ def generate_key_package(
                 credential_with_key,
                 )
     return bundle
+
+
+def match_message_body_in_variant(message_body_in):
+    match message_body_in:
+        case MlsMessageBodyIn.Welcome(welcome):
+            return welcome
+        case _:
+            raise ValueError(f"No supported message body in variant found for: {message_body_in=}")
 
 cred_w_key, key_pair = generate_credential_with_key(
     identity = b'Super_secret_ID',
@@ -136,12 +145,14 @@ def main():
     mls_message_in = MlsMessageIn.tls_deserialize(serialized_welcome)
 
     # ... and inspect the message.
-    welcome = mls_message_in.extract_welcome()
+    # welcome = mls_message_in.extract_welcome()
     # welcome = match mls_message_in.extract() {
     #    MlsMessageBodyIn::Welcome(welcome) => welcome,
     #    # We know it's a welcome message, so we ignore all other cases.
     #    _ => unreachable!("Unexpected message type."),
     # };
+    welcome = match_message_body_in_variant(mls_message_in.extract())
+
     MlsGroupJoinConfig()
     # Now Maxim can build a staged join for the group in order to inspect the welcome
     maxim_staged_join = StagedWelcome.new_from_welcome(

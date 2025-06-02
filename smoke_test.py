@@ -117,8 +117,16 @@ print(f'{serialized_welcome=}')
 mls_message_in = MlsMessageIn.tls_deserialize(serialized_welcome)
 print(f'{mls_message_in=}')
 
-welcome = mls_message_in.extract_welcome()
+message_body_in = mls_message_in.extract()
+print(f'{message_body_in=}')
+
+
+welcome = quick_start_python.match_message_body_in_variant(message_body_in)
+
+
+# welcome = mls_message_in.extract_welcome()
 print(f'{welcome=}')
+
 # welcome = match mls_message_in.extract() {
 #    MlsMessageBodyIn::Welcome(welcome) => welcome,
 #    # We know it's a welcome message, so we ignore all other cases.
