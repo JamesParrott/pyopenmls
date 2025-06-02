@@ -7,7 +7,7 @@ use super::signature_key_pair::PySignatureKeyPair;
 use super::credential_with_key::PyCredentialWithKey;
 use super::key_packages::PyKeyPackage;
 use super::ratchet_tree_in::PyRatchetTreeIn;
-use super::welcome::PyWelcome;
+use super::messages::{PyWelcome,PyPublicMessageIn,PyPrivateMessageIn,PyVerifiableGroupInfo,PyKeyPackageMsgIn};
 
 
 #[derive(Debug)]
@@ -151,11 +151,11 @@ impl PyMlsMessageIn {
 #[derive(Debug)]
 #[pyclass(name="MlsMessageBodyIn")]
 pub enum PyMlsMessageBodyIn {
-    // PublicMessage(PublicMessageIn),
-    // PrivateMessage(PrivateMessageIn),
+    PublicMessage(PyPublicMessageIn),
+    PrivateMessage(PyPrivateMessageIn),
     Welcome(PyWelcome),
-    // GroupInfo(VerifiableGroupInfo),
-    // KeyPackage(KeyPackageIn),
+    GroupInfo(PyVerifiableGroupInfo),
+    KeyPackage(PyKeyPackageMsgIn),
 }
 
 impl PyMlsMessageBodyIn {                
@@ -163,11 +163,10 @@ impl PyMlsMessageBodyIn {
     pub fn from_MlsMessageBodyIn(message_in: MlsMessageIn) -> PyResult<Self> {
         match message_in.extract() {
             MlsMessageBodyIn::Welcome(welcome) => Ok(PyMlsMessageBodyIn::Welcome(PyWelcome{wrapped:welcome})),
-            // MlsMessageBodyIn::PrivateMessage(message) => Ok(PyMlsMessageBodyIn::PrivateMessage(message)),
-            // MlsMessageBodyIn::PublicMessage(message) => Ok(PyMlsMessageBodyIn::PublicMessage(message)),
-            // MlsMessageBodyIn::GroupInfo(group_info) => Ok(PyMlsMessageBodyIn::GroupInfo(group_info)),
-            // MlsMessageBodyIn::KeyPackage(key_package) => Ok(PyMlsMessageBodyIn::KeyPackage(key_package)),
-            _ => Err(PyValueError::new_err("MlsMessageIn did not match a supported message variant.")),
+            MlsMessageBodyIn::PrivateMessage(message) => Ok(PyMlsMessageBodyIn::PrivateMessage(PyPrivateMessageIn{wrapped:message})),
+            MlsMessageBodyIn::PublicMessage(message) => Ok(PyMlsMessageBodyIn::PublicMessage(PyPublicMessageIn{wrapped:message})),
+            MlsMessageBodyIn::GroupInfo(group_info) => Ok(PyMlsMessageBodyIn::GroupInfo(PyVerifiableGroupInfo{wrapped:group_info})),
+            MlsMessageBodyIn::KeyPackage(key_package) => Ok(PyMlsMessageBodyIn::KeyPackage(PyKeyPackageMsgIn{wrapped:key_package})),
         }
 
     }
