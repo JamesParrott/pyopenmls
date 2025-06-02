@@ -152,8 +152,17 @@ print(f'{maxim_staged_join=}')
 maxim_group = maxim_staged_join.into_group(provider)
 print(f'{maxim_group=}')
 
+# Test senign application messages!
 hello_maxim_message = group.create_message(provider, signature_key_pair, b"Hello Maxim from anon group creator!")
 
 print(f'{hello_maxim_message=}')
+hello_maxim_message_serialized = hello_maxim_message.tls_serialize_detached()
+print(f'{hello_maxim_message_serialized=}')
 
+hello_maxim_message_in = MlsMessageIn.tls_deserialize(hello_maxim_message_serialized)
+print(f'{hello_maxim_message_in=}')
+
+hello_maxim_message_body_in = quick_start_python.match_message_body_in_variant(hello_maxim_message_in.extract())
+
+print(f'{hello_maxim_message_body_in=}')
 print('\n\n')
