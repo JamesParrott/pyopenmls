@@ -2,6 +2,7 @@ use pyo3::prelude::{*};
 use pyo3::exceptions::PyValueError;
 use openmls::prelude::tls_codec::{Serialize,Deserialize};
 use openmls::prelude::{*,group_info::{GroupInfo},};
+
 use super::openmls_rust_crypto_provider::PyOpenMlsRustCrypto;
 use super::signature_key_pair::PySignatureKeyPair;
 use super::credential_with_key::PyCredentialWithKey;
@@ -97,6 +98,19 @@ impl PyMlsGroup {
     pub fn export_ratchet_tree(&self) -> PyResult<PyRatchetTreeIn>{
         Ok(PyRatchetTreeIn{wrapped:self.wrapped.export_ratchet_tree().into()})
     }
+
+    pub fn create_message(
+        &mut self,
+        provider: &PyOpenMlsRustCrypto,
+        signer: &PySignatureKeyPair,
+        message: &[u8],
+    ) -> PyResult<PyMlsMessageOut> {
+        if let Ok(message_out) = self.wrapped.create_message(&provider.wrapped, &signer.wrapped, message) {
+            Ok(PyMlsMessageOut{wrapped: message_out})
+        } else {
+            Err(PyValueError::new_err(format!("Could not create message: {:#?} from signer: {:#?}",message,signer)))
+        }
+    }
 }
 
 
@@ -112,6 +126,13 @@ pub struct PyMlsMessageOut {
 impl PyMlsMessageOut {
     pub fn tls_serialize_detached(&self) -> Vec<u8> {
         self.wrapped.tls_serialize_detached().expect("MlsMessageOut should be serializable")
+    }
+    pub fn __repr__(&self) -> String {
+        if let MlsMessageBodyOut::PrivateMessage(ciphertext) = self.wrapped.body() {
+            format!("MlsMessageOut< Ciphertext: {:#?} >",ciphertext)
+        } else {
+            "Could not unwrap message".to_string()
+        }
     }
 }
 

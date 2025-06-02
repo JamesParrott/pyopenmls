@@ -12,6 +12,7 @@ crate-type = ["cdylib"]
 openmls = "0.6.0"
 openmls_basic_credential = "0.3.0"
 openmls_rust_crypto = "0.3.0"
+openmls_traits = "0.3.0"
 pyo3 = "0.24.0"
 strum = "0.27.1"
 strum_macros = "0.27.1"

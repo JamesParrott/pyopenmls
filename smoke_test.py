@@ -152,6 +152,8 @@ print(f'{maxim_staged_join=}')
 maxim_group = maxim_staged_join.into_group(provider)
 print(f'{maxim_group=}')
 
+hello_maxim_message = group.create_message(provider, signature_key_pair, b"Hello Maxim from anon group creator!")
 
+print(f'{hello_maxim_message=}')
 
 print('\n\n')

@@ -2,9 +2,12 @@ use pyo3::prelude::{*};
 use pyo3::exceptions::PyValueError;
 use openmls::prelude::{SignatureScheme,OpenMlsProvider};
 use openmls_basic_credential::SignatureKeyPair;
+use openmls_traits::signatures::Signer;
+
 use super::signature_scheme::PySignatureScheme;
 use super::openmls_rust_crypto_provider::PyOpenMlsRustCrypto;
 
+#[derive(Debug)]
 #[pyclass(name="SignatureKeyPair")]
 pub struct PySignatureKeyPair {
     pub wrapped : SignatureKeyPair,
@@ -41,5 +44,13 @@ impl PySignatureKeyPair {
         Ok(self.wrapped.public())
     }
 
+    pub fn __repr__(&self) -> String {
+        let pub = self.public().expect("Signature key pair's public key to be visible. ")
+        if let Ok(sig) = self.wrapped.sign(b"\0") {
+            format!("SignatureKeyPair< Public Key: {:?}, Signed null byte: {:?} >",self.public().unwr, sig)
+        } else {
+            format!("SignatureKeyPair< Public Key: {:?},Error eigning null byte >",self.public())
+        }
+    }
 }
 

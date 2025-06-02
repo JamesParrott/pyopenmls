@@ -719,6 +719,7 @@ dependencies = [
  "openmls",
  "openmls_basic_credential",
  "openmls_rust_crypto",
+ "openmls_traits",
  "pyo3",
  "strum",
  "strum_macros",
