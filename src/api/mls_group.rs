@@ -153,7 +153,7 @@ impl PyMlsMessageIn {
 pub enum PyMlsMessageBodyIn {
     // PublicMessage(PublicMessageIn),
     // PrivateMessage(PrivateMessageIn),
-    Welcome{wrapped:PyWelcome},
+    Welcome(PyWelcome),
     // GroupInfo(VerifiableGroupInfo),
     // KeyPackage(KeyPackageIn),
 }
@@ -162,7 +162,7 @@ impl PyMlsMessageBodyIn {
     #[allow(non_snake_case)]
     pub fn from_MlsMessageBodyIn(message_in: MlsMessageIn) -> PyResult<Self> {
         match message_in.extract() {
-            MlsMessageBodyIn::Welcome(welcome) => Ok(PyMlsMessageBodyIn::Welcome{wrapped:PyWelcome{wrapped:welcome}}),
+            MlsMessageBodyIn::Welcome(welcome) => Ok(PyMlsMessageBodyIn::Welcome(PyWelcome{wrapped:welcome})),
             // MlsMessageBodyIn::PrivateMessage(message) => Ok(PyMlsMessageBodyIn::PrivateMessage(message)),
             // MlsMessageBodyIn::PublicMessage(message) => Ok(PyMlsMessageBodyIn::PublicMessage(message)),
             // MlsMessageBodyIn::GroupInfo(group_info) => Ok(PyMlsMessageBodyIn::GroupInfo(group_info)),
