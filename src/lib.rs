@@ -1,6 +1,7 @@
 use pyo3::prelude::{*};
 
 mod api;
+mod helpers;
 
 
 #[pymodule]

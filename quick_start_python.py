@@ -15,9 +15,6 @@ from pyopenmls import (BasicCredential,
                        StagedWelcome,
                       )
                       
-print('Reproduce quickstart in Python')
-ciphersuite = Ciphersuite.MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519
-provider = OpenMlsRustCrypto()
 
 
 
@@ -89,15 +86,11 @@ def match_message_body_in_variant(message_body_in):
         case _:
             raise ValueError(f"No supported message body in variant found for: {message_body_in=}")
 
-cred_w_key, key_pair = generate_credential_with_key(
-    identity = b'Super_secret_ID',
-    credential_type = CredentialType.Basic,
-    provider = provider,
-    ciphersuite = ciphersuite,
-    )
 
 def main():
-    key_package_bundle = generate_key_package(ciphersuite, provider, key_pair, cred_w_key)
+    print('Reproduce quickstart in Python')
+    ciphersuite = Ciphersuite.MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519
+    provider = OpenMlsRustCrypto()
 
 
     #First they need credentials to identify them

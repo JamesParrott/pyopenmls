@@ -4,6 +4,8 @@ use openmls::prelude::{SignatureScheme,OpenMlsProvider};
 use openmls_basic_credential::SignatureKeyPair;
 use openmls_traits::signatures::Signer;
 
+use super::super::helpers::hex::{hex_str};
+
 use super::signature_scheme::PySignatureScheme;
 use super::openmls_rust_crypto_provider::PyOpenMlsRustCrypto;
 
@@ -45,9 +47,10 @@ impl PySignatureKeyPair {
     }
 
     pub fn __repr__(&self) -> String {
-        let pub_key = self.public().expect("Signature key pair's public key to be visible. ");
+        let pub_key = hex_str(&self.public().expect("Signature key pair's public key to be visible. "));
         if let Ok(sig) = self.wrapped.sign(b"\0") {
-            format!("SignatureKeyPair< Public Key: {:?}, Signed null byte: {:?} >",pub_key, sig)
+            let sig_hex=hex_str(&sig);
+            format!("SignatureKeyPair< Public Key: {:?}, Signed null byte: {:?} >",pub_key, sig_hex)
         } else {
             format!("SignatureKeyPair< Public Key: {:?},Error eigning null byte >",pub_key)
         }
