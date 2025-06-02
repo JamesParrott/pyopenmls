@@ -45,11 +45,11 @@ impl PySignatureKeyPair {
     }
 
     pub fn __repr__(&self) -> String {
-        let pub = self.public().expect("Signature key pair's public key to be visible. ")
+        let pub_key = self.public().expect("Signature key pair's public key to be visible. ");
         if let Ok(sig) = self.wrapped.sign(b"\0") {
-            format!("SignatureKeyPair< Public Key: {:?}, Signed null byte: {:?} >",self.public().unwr, sig)
+            format!("SignatureKeyPair< Public Key: {:?}, Signed null byte: {:?} >",pub_key, sig)
         } else {
-            format!("SignatureKeyPair< Public Key: {:?},Error eigning null byte >",self.public())
+            format!("SignatureKeyPair< Public Key: {:?},Error eigning null byte >",pub_key)
         }
     }
 }
