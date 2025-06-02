@@ -23,6 +23,10 @@ fn pyopenmls(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<api::mls_group::PyMlsMessageIn>()?;
     m.add_class::<api::mls_group::PyMlsMessageBodyIn>()?;
     m.add_class::<api::staged_welcome::PyStagedWelcome>()?;
+    m.add_class::<api::messages::PyPublicMessageIn>()?;
+    m.add_class::<api::messages::PyPrivateMessageIn>()?;
     m.add_class::<api::messages::PyWelcome>()?;
+    m.add_class::<api::messages::PyVerifiableGroupInfo>()?;
+    m.add_class::<api::messages::PyKeyPackageMsgIn>()?;
     Ok(())
 }

@@ -76,8 +76,16 @@ def generate_key_package(
 
 def match_message_body_in_variant(message_body_in):
     match message_body_in:
+        case MlsMessageBodyIn.PublicMessage(message):
+            return message
+        case MlsMessageBodyIn.PrivateMessage(message):
+            return message
         case MlsMessageBodyIn.Welcome(welcome):
             return welcome
+        case MlsMessageBodyIn.GroupInfo(group_info):
+            return group_info
+        case MlsMessageBodyIn.KeyPackage(key_package):
+            return key_package
         case _:
             raise ValueError(f"No supported message body in variant found for: {message_body_in=}")
 
