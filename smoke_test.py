@@ -165,4 +165,7 @@ print(f'{hello_maxim_message_in=}')
 hello_maxim_message_body_in = quick_start_python.match_message_body_in_variant(hello_maxim_message_in.extract())
 
 print(f'{hello_maxim_message_body_in=}')
+
+plain_text: bytes = maxim_group.read_private_message(hello_maxim_message_body_in, provider)
+print(f'{plain_text=}')
 print('\n\n')
