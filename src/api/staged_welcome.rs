@@ -2,7 +2,7 @@ use pyo3::prelude::{*};
 use pyo3::exceptions::PyRuntimeError;
 use openmls::prelude::{*};
 use super::openmls_rust_crypto_provider::PyOpenMlsRustCrypto;
-use super::welcome::PyWelcome;
+use super::messages::PyWelcome;
 use super::mls_group::{PyMlsGroup,PyMlsGroupJoinConfig};
 use super::ratchet_tree_in::PyRatchetTreeIn;
 

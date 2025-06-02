@@ -7,7 +7,7 @@ use super::signature_key_pair::PySignatureKeyPair;
 use super::credential_with_key::PyCredentialWithKey;
 use super::key_packages::PyKeyPackage;
 use super::ratchet_tree_in::PyRatchetTreeIn;
-use super::welcome::PyWelcome;
+use super::messages::{PyWelcome,PyPublicMessageIn,PyPrivateMessageIn,PyVerifiableGroupInfo,PyKeyPackageMsgIn};
 
 
 #[derive(Debug)]
@@ -139,13 +139,38 @@ impl PyMlsMessageIn {
             _ => Err(PyValueError::new_err("MlsMessageIn did not match a welcome message.")),
         }
     }
+    pub fn extract(&self) -> PyResult<PyMlsMessageBodyIn>{
+        PyMlsMessageBodyIn::from_MlsMessageBodyIn(self.wrapped.clone())
+        // match self.wrapped.clone().extract() {
+        //     MlsMessageBodyIn::Welcome(welcome) => Ok(PyWelcome{wrapped:welcome}),
+        //     _ => Err(PyValueError::new_err("MlsMessageIn did not match a welcome message.")),
+        // }
+    }
 }
-
 
 #[derive(Debug)]
 #[pyclass(name="MlsMessageBodyIn")]
-pub struct PyMlsMessageBodyIn {
-    pub wrapped : MlsMessageBodyIn,
+pub enum PyMlsMessageBodyIn {
+    PublicMessage(PyPublicMessageIn),
+    PrivateMessage(PyPrivateMessageIn),
+    Welcome(PyWelcome),
+    GroupInfo(PyVerifiableGroupInfo),
+    KeyPackage(PyKeyPackageMsgIn),
+}
+
+impl PyMlsMessageBodyIn {                
+    #[allow(non_snake_case)]
+    pub fn from_MlsMessageBodyIn(message_in: MlsMessageIn) -> PyResult<Self> {
+        match message_in.extract() {
+            MlsMessageBodyIn::Welcome(welcome) => Ok(PyMlsMessageBodyIn::Welcome(PyWelcome{wrapped:welcome})),
+            MlsMessageBodyIn::PrivateMessage(message) => Ok(PyMlsMessageBodyIn::PrivateMessage(PyPrivateMessageIn{wrapped:message})),
+            MlsMessageBodyIn::PublicMessage(message) => Ok(PyMlsMessageBodyIn::PublicMessage(PyPublicMessageIn{wrapped:message})),
+            MlsMessageBodyIn::GroupInfo(group_info) => Ok(PyMlsMessageBodyIn::GroupInfo(PyVerifiableGroupInfo{wrapped:group_info})),
+            MlsMessageBodyIn::KeyPackage(key_package) => Ok(PyMlsMessageBodyIn::KeyPackage(PyKeyPackageMsgIn{wrapped:key_package})),
+        }
+
+    }
+
 }
 
 
