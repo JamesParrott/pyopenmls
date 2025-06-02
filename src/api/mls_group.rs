@@ -139,13 +139,41 @@ impl PyMlsMessageIn {
             _ => Err(PyValueError::new_err("MlsMessageIn did not match a welcome message.")),
         }
     }
+    pub fn extract(&self) -> PyResult<PyMlsMessageBodyIn>{
+        PyMlsMessageBodyIn::from_MlsMessageBodyIn(self.wrapped.clone())
+        // match self.wrapped.clone().extract() {
+        //     MlsMessageBodyIn::Welcome(welcome) => Ok(PyWelcome{wrapped:welcome}),
+        //     _ => Err(PyValueError::new_err("MlsMessageIn did not match a welcome message.")),
+        // }
+    }
 }
 
 
 #[derive(Debug)]
 #[pyclass(name="MlsMessageBodyIn")]
-pub struct PyMlsMessageBodyIn {
-    pub wrapped : MlsMessageBodyIn,
+pub enum PyMlsMessageBodyIn {
+    PublicMessage(PublicMessageIn),
+    PrivateMessage(PrivateMessageIn),
+    Welcome(Welcome),
+    GroupInfo(VerifiableGroupInfo),
+    KeyPackage(KeyPackageIn),
+}
+
+#[pymethods]
+impl PyMlsMessageBodyIn {
+    #[staticmethod]
+    pub fn from_MlsMessageBodyIn(message_in: MlsMessageIn) -> PyResult<Self> {
+        match message_in.extract() {
+            MlsMessageBodyIn::Welcome(welcome) => Ok(PyMlsMessageBodyIn::Welcome(welcome)),
+            MlsMessageBodyIn::PrivateMessage(message) => Ok(PyMlsMessageBodyIn::PrivateMessage(message)),
+            MlsMessageBodyIn::PublicMessage(message) => Ok(PyMlsMessageBodyIn::PublicMessage(message)),
+            MlsMessageBodyIn::GroupInfo(group_info) => Ok(PyMlsMessageBodyIn::GroupInfo(group_info)),
+            MlsMessageBodyIn::KeyPackage(key_package) => Ok(PyMlsMessageBodyIn::KeyPackage(key_package)),
+            _ => Err(PyValueError::new_err("MlsMessageIn did not match a supported message variant.")),
+        }
+
+    }
+
 }
 
 
