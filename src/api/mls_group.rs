@@ -111,6 +111,21 @@ impl PyMlsGroup {
             Err(PyValueError::new_err(format!("Could not create message: {:#?} from signer: {:#?}",message,signer)))
         }
     }
+
+    pub fn read_private_message(
+        &mut self,
+        py_message: &PyPrivateMessageIn,
+        py_provider: &PyOpenMlsRustCrypto,
+    ) -> PyResult<Vec<u8>> {
+        let processed_message: ProcessedMessage = self.wrapped.process_message(&py_provider.wrapped, py_message.wrapped.clone())
+                                            .expect("Could not process message.");
+        if let ProcessedMessageContent::ApplicationMessage(application_message) = processed_message.into_content() {
+            Ok(application_message.into_bytes())
+        } else {
+            Err(PyValueError::new_err("Could not read private message"))
+
+        }
+    }
 }
 
 

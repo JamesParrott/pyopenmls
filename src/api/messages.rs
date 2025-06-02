@@ -1,6 +1,5 @@
 use pyo3::prelude::{*};
 use openmls::prelude::{*,group_info::VerifiableGroupInfo};
-// use super::signature_scheme::PySignatureScheme;
 
 /// Wrapper for OpenMLS PublicMessageIn
 #[derive(Debug,Clone)]
@@ -16,6 +15,7 @@ pub struct PyPublicMessageIn {
 pub struct PyPrivateMessageIn {
     pub wrapped: PrivateMessageIn,
 }
+
 
 /// Wrapper for OpenMLS Welcome
 #[derive(Debug,Clone)]
