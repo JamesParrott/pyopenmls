@@ -1,15 +1,22 @@
 from pyopenmls import (BasicCredential,
+                       CredentialWithKey,
                        CredentialType,
                        Ciphersuite,
+                       KeyPackage,
+                       KeyPackageBundle,
                        OpenMlsRustCrypto,
                        SignatureKeyPair,
                        SignatureScheme,
-                       CredentialWithKey,
-                       KeyPackage,
-                       KeyPackageBundle,
+                       MlsGroup,
+                       MlsGroupCreateConfig,
+                       MlsGroupJoinConfig,
+                       MlsMessageIn,
+                       StagedWelcome,
                       )
 
-cred = BasicCredential(b'32rgrrhej68563ywe')
+import quick_start_python
+
+cred = BasicCredential(b'Secret_ID_bytes')
 print(f'{cred.identity=}')
 
 def print_deets_of_enum_member(enum_member) -> None:
@@ -26,17 +33,117 @@ print_deets_of_enum_member(cipher_suite)
 print(f'{cipher_suite is Ciphersuite.MLS_256_XWING_CHACHA20POLY1305_SHA256_Ed25519=}')
 print(f'{cipher_suite.signature_algorithm()=}')
 
-default_provider = OpenMlsRustCrypto()
-print(f'{default_provider=}')
+provider = OpenMlsRustCrypto()
+print(f'{provider=}')
 
-# signature_key_pair_default = SignatureKeyPair()
-# print(f'{signature_key_pair_default=}')
-# signature_key_pair = SignatureKeyPair(signature_scheme, provider)
+
 signature_key_pair_ED25519 = SignatureKeyPair(SignatureScheme.ED25519)
 print(f'{signature_key_pair_ED25519=}')
 
 signature_key_pair_ciphersuite = SignatureKeyPair(cipher_suite.signature_algorithm())
 print(f'{signature_key_pair_ciphersuite=}')
+
+
+ciphersuite = Ciphersuite.MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519
+signature_algorithm = ciphersuite.signature_algorithm()
+signature_key_pair = SignatureKeyPair(signature_algorithm)
+
+print(f'{signature_key_pair=}')
+
+print(f'{provider.storage_values=}')
+signature_key_pair.store_in_provider(provider)
+print(f'{provider.storage_values=}')
+
+public_key = signature_key_pair.public()
+print(f'{public_key=}')
+credential_with_key = CredentialWithKey(cred, public_key)
+
+print(f'{credential_with_key=}')
+
+builder = KeyPackage.builder()
+print(f'{builder=}')
+
+key_package_bundle = builder.build(
+                ciphersuite,
+                provider,
+                signature_key_pair,
+                credential_with_key,
+                )
+print(f'{key_package_bundle=}')
+
+create_default_config = MlsGroupCreateConfig()
+print(f'{create_default_config=}')
+
+group = MlsGroup(
+    provider,
+    signature_key_pair,
+    create_default_config,
+    credential_with_key,
+)
+print(f'{group=}')
+
+maxim_credential_with_key, maxim_signer = quick_start_python.generate_credential_with_key(
+    b"Maxim",
+    CredentialType.Basic,
+    signature_algorithm,
+    provider,
+)
+
+maxim_key_package_bundle = quick_start_python.generate_key_package(
+    ciphersuite,
+    provider,
+    maxim_signer,
+    maxim_credential_with_key,
+)
+print(f'{maxim_key_package_bundle=}')
+
+maxim_key_package=maxim_key_package_bundle.key_package()
+print(f'{maxim_key_package=}')
+
+mls_message_out, welcome_out, group_info = (group
+    .add_member(provider, signature_key_pair, maxim_key_package)
+)
+
+print(f'{mls_message_out=}')
+print(f'{welcome_out=}')
+print(f'{group_info=}')
+
+retval = group.merge_pending_commit(provider)
+print(f'{retval=}')
+
+serialized_welcome: bytes = welcome_out.tls_serialize_detached()
+print(f'{serialized_welcome=}')
+
+mls_message_in = MlsMessageIn.tls_deserialize(serialized_welcome)
+print(f'{mls_message_in=}')
+
+welcome = mls_message_in.extract_welcome()
+print(f'{welcome=}')
+# welcome = match mls_message_in.extract() {
+#    MlsMessageBodyIn::Welcome(welcome) => welcome,
+#    # We know it's a welcome message, so we ignore all other cases.
+#    _ => unreachable!("Unexpected message type."),
+# };
+group_join_default_config = MlsGroupJoinConfig()
+print(f'{group_join_default_config=}')
+
+exported_ratchet_tree = group.export_ratchet_tree(),
+print(f'{exported_ratchet_tree=}')
+
+maxim_staged_join = StagedWelcome.new_from_welcome(
+    provider,
+    group_join_default_config,
+    welcome,
+    # The public tree is need and transferred out of band.
+    # It is also possible to use the [`RatchetTreeExtension`]
+    exported_ratchet_tree[0],
+)
+# .expect("Error creating a staged join from Welcome");
+print(f'{maxim_staged_join=}')
+
+maxim_group = maxim_staged_join.into_group(provider)
+print(f'{maxim_group=}')
+
 
 
 print('\n\n')
