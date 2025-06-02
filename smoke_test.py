@@ -127,7 +127,7 @@ print(f'{welcome=}')
 group_join_default_config = MlsGroupJoinConfig()
 print(f'{group_join_default_config=}')
 
-exported_ratchet_tree = group.export_ratchet_tree(),
+exported_ratchet_tree = group.export_ratchet_tree()
 print(f'{exported_ratchet_tree=}')
 
 maxim_staged_join = StagedWelcome.new_from_welcome(
@@ -136,7 +136,7 @@ maxim_staged_join = StagedWelcome.new_from_welcome(
     welcome,
     # The public tree is need and transferred out of band.
     # It is also possible to use the [`RatchetTreeExtension`]
-    exported_ratchet_tree[0],
+    exported_ratchet_tree,
 )
 # .expect("Error creating a staged join from Welcome");
 print(f'{maxim_staged_join=}')

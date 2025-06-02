@@ -94,8 +94,8 @@ impl PyMlsGroup {
         self.wrapped.merge_pending_commit(&provider.wrapped).expect("error merging pending commit");
     }
 
-    pub fn export_ratchet_tree(&self) -> PyRatchetTreeIn{
-        PyRatchetTreeIn{wrapped:self.wrapped.export_ratchet_tree().into()}
+    pub fn export_ratchet_tree(&self) -> PyResult<PyRatchetTreeIn>{
+        Ok(PyRatchetTreeIn{wrapped:self.wrapped.export_ratchet_tree().into()})
     }
 }
 
