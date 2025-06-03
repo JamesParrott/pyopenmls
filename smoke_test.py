@@ -55,7 +55,7 @@ signature_key_pair.store_in_provider(provider)
 print(f'{provider.storage_values=}')
 
 public_key = signature_key_pair.public()
-print(f'{public_key=}')
+print(f'{public_key.hex()=}')
 credential_with_key = CredentialWithKey(cred, public_key)
 
 print(f'{credential_with_key=}')
@@ -112,7 +112,7 @@ retval = group.merge_pending_commit(provider)
 print(f'{retval=}')
 
 serialized_welcome: bytes = welcome_out.tls_serialize_detached()
-print(f'{serialized_welcome=}')
+print(f'{serialized_welcome.hex()=}')
 
 mls_message_in = MlsMessageIn.tls_deserialize(serialized_welcome)
 print(f'{mls_message_in=}')
@@ -153,7 +153,7 @@ maxim_group = maxim_staged_join.into_group(provider)
 print(f'{maxim_group=}')
 
 # Test senign application messages!
-hello_maxim_message = group.create_message(provider, signature_key_pair, b"Hello Maxim from anon group creator!")
+hello_maxim_message = group.create_message(provider, signature_key_pair, b"Hello Maxim from anon group creator.")
 
 print(f'{hello_maxim_message=}')
 hello_maxim_message_serialized = hello_maxim_message.tls_serialize_detached()
@@ -167,5 +167,22 @@ hello_maxim_message_body_in = quick_start_python.match_message_body_in_variant(h
 print(f'{hello_maxim_message_body_in=}')
 
 plain_text: bytes = maxim_group.read_private_message(hello_maxim_message_body_in, provider)
+print(f'{plain_text=}')
+print('\n\n')
+
+maxim_reply = maxim_group.create_message(provider, maxim_signer, b"Hello group members.")
+print(f'{maxim_reply=}')
+
+maxim_reply_message_serialized = maxim_reply.tls_serialize_detached()
+print(f'{maxim_reply_message_serialized.hex()=}')
+
+maxim_reply_message_in = MlsMessageIn.tls_deserialize(maxim_reply_message_serialized)
+print(f'{maxim_reply_message_in=}')
+
+maxim_reply_message_body_in = quick_start_python.match_message_body_in_variant(maxim_reply_message_in.extract())
+
+print(f'{maxim_reply_message_body_in=}')
+
+plain_text: bytes = group.read_private_message(maxim_reply_message_body_in, provider)
 print(f'{plain_text=}')
 print('\n\n')
